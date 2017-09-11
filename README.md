@@ -2,10 +2,10 @@
 
 Repository for HW assignments of Stat 133 (Fall 2017)
 
-- Student name: First Last
-- Github username: usrname
+- Student name: Bryant Luong
+- Github username: earnestpointers
 - Lab section: 101
-- GSI: Leia Organa
+- GSI: Min
 
 -----
 
