@@ -87,7 +87,7 @@ abline(h = 10, lty = 2)
 
 Observations of scatterplot:
 
-1.  The cluster of points in the bottom left corner of the scatterplot means most players score below 500 points in a season and have a salary below $5 million.
+1.  The cluster of points in the bottom left corner of the scatterplot means most players scored below 500 points last season and had a salary below $5 million.
 
 2.  There are 3 players who scored around 2,000 points last season but had salaries close to $5 million and 3 players who scored between 1,600 and 1,900 points and had salaries close to $2.5 million.
 
@@ -203,11 +203,11 @@ summary(y_hat)
 
 ##### Regression Equation
 
-The simple linear regression equation is `y_hat = intercept + slope * points`.
+Symbolically, the simple linear regression equation is `y_hat = intercept + slope * points`. Numerically, the simple linear regression equation is `y_hat = 1.51 + 0.0086 * points`.
 
 ##### How do you interpret the slope coefficient?
 
-The slope coefficient shows the average increase in annual salary per point.
+The slope coefficient shows the average increase in annual salary per point. In other words, a player can earn approximately $8,600 for each point scored during the season.
 
 ##### How do you interpret the intercept?
 
@@ -215,36 +215,41 @@ The intercept shows the average baseline salary. If the player doesn't score any
 
 ##### What is the predicted salary (in millions) for a player that scores:
 
+##### 0 points
+
 ``` r
-# 0 points
 intercept + slope * 0
 ```
 
     ## [1] 1.509077
 
+##### 100 points
+
 ``` r
-# 100 points
 intercept + slope * 100
 ```
 
     ## [1] 2.364833
 
+##### 500 points
+
 ``` r
-# 500 points
 intercept + slope * 500
 ```
 
     ## [1] 5.78786
 
+##### 1000 points
+
 ``` r
-# 1000 points
 intercept + slope * 1000
 ```
 
     ## [1] 10.06664
 
+##### 2000 points
+
 ``` r
-# 2000 points
 intercept + slope * 2000
 ```
 
@@ -256,7 +261,7 @@ intercept + slope * 2000
 # plot data in scatter plot
 plot(points, 
      salary_millions, 
-     main = 'Regression and Lowess lines', 
+     main = 'Scatterplot of Points and Salary with Regression and Lowess Lines', 
      xlab = 'Points', 
      ylab = 'Salary (in millions)', 
      pch = 21, 
@@ -294,7 +299,7 @@ text(x = 2490,
 
 ![](hw01-bryant-luong_files/figure-markdown_github-ascii_identifiers/scatter%20with%20regression-1.png)
 
-### 6) Regression residuals and Coefficient of Determination
+### 6) Regression Residuals and Coefficient of Determination
 
 ``` r
 # Calculate residuals and store them in a vector
@@ -334,7 +339,7 @@ r_sqrd
 ``` r
 # Create scatterplot of years of experience to salary
 plot(experience_int, salary_millions, 
-     main = 'Scatterplot with lowess smooth', 
+     main = 'Scatterplot of Years of Experience and Salary with Lowess Line', 
      xlab = 'Years of Experience', 
      ylab = 'Salary (in millions)', 
      pch = 21, 
@@ -373,7 +378,8 @@ scatterplot3d(points,
               type = "h",
               xlab = "Points",
               ylab = "Experience",
-              zlab = "Salary (in millions)")
+              zlab = "Salary (in millions)",
+              main = "3D Scatterplot of Points, Experience, and Salary")
 ```
 
 ![](hw01-bryant-luong_files/figure-markdown_github-ascii_identifiers/3dscatterplot-1.png)
@@ -407,7 +413,9 @@ pos_num <- as.integer(pos_num)
 boxplot(salary_millions ~ pos_num,
         xlab = 'Position',
         ylab = 'Salary (in millions)',
-        names = c('center', 'point_fwd', 'point_guard', 'small_fwd', 'shoot_guard'))
+        main = 'Boxplot of Salary for Each Position',
+        names = c('center', 'point_fwd', 'point_guard', 'small_fwd', 'shoot_guard'),
+        col = c('#008744', '#0057e7', '#d62d20', '#ffa700', 'white'))
 ```
 
 ![](hw01-bryant-luong_files/figure-markdown_github-ascii_identifiers/boxplot-1.png)
@@ -418,40 +426,40 @@ From the boxplot, position does not seem related to salary. All positions have a
 
 **1. What was hard, even though you saw them in class?**
 
-    I am still familiarizing myself with vectorization. I have programmed in other languages and vectorization is unnatural to me. However, it is very useful and quick. I like it!
+I am still familiarizing myself with vectorization. I have programmed in other languages and vectorization is unnatural to me. However, it is very useful and quick. I like it!
 
 **2. What was easy, even though we didn't cover it in class?**
 
-    The easy part was figuring out how plot elements are colored.
+The easy part was figuring out how plot elements are colored.
 
 **3. If this was the first time you were using git, how do you feel about it?**
 
-    This isn't my first time using git. Gaston's slides on git are awesome at explaining the idea of git.
+This isn't my first time using git. Gaston's slides on git are awesome at explaining the idea of git.
 
-**4. If this was the first time using GitHub, how do you feel about it?**
+**4. If this was the first time you were using GitHub, how do you feel about it?**
 
-    This isn't my first time using GitHub. GitHub is great! I think GitHub is hard to explain so students must learn by using it.
+This isn't my first time using GitHub. GitHub is great! I think GitHub is hard to explain so students must learn by using it.
 
 **5. Did you need help completing this assignment?**
 
-    Yes, I needed help. I needed to look at documentation to understand the behavior of multiple functions. Those functions were abline, lines, text, scatterplot3d, and boxplot.
+Yes, I needed help. I needed to look at documentation to understand the behavior of multiple functions. Those functions were abline, lines, text, scatterplot3d, and boxplot.
 
 **6. How much time did it take to complete this HW?**
 
-    6 hours. I got distracted when I was looking at documentation. It's fun seeing how other people are using the functions.
+6 hours. I got distracted when I was looking at documentation. It's fun seeing how other people are using the functions.
 
 **7. What was the most time consuming part?**
 
-    Formating and reading documentation
+Formating and reading documentation
 
 **8. Was there anything that you did not understand?**
 
-    The syntax for boxplot is strange. I'll get used to it.
+The syntax for boxplot is strange. I'll get used to it.
 
 **9. Was there anything frustrating in particular?**
 
-    Yes. GitHub needs to render pdfs faster.
+Yes. GitHub needs to render pdfs faster.
 
 **10. Was there anything exciting?**
 
-    Yes. This assignment was fun because it's teaching me more about the NBA and it was useful in demonstrating the flexibility of R and RStudio. I like the plot function a lot. Hopefully we get to much bigger datasets soon.
+Yes. This assignment was fun because it's teaching me more about the NBA and it was useful in demonstrating the flexibility of R and RStudio. I like the plot function a lot. Hopefully we use bigger datasets soon.
