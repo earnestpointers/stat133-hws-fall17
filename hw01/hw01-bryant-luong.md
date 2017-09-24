@@ -1,12 +1,12 @@
----
-title: "HW 01 - More Vectors"
-author: "Bryant Luong"
-date: "2017-09-23"
-output: github_document
----
+HW 01 - More Vectors
+================
+Bryant Luong
+2017-09-23
 
 ### 0) Importing the data
-```{r setup}
+
+``` r
+knitr::opts_chunk$set(echo = TRUE)
 
 # load data file
 load("data/nba2017-salary-points.RData")
@@ -15,17 +15,29 @@ load("data/nba2017-salary-points.RData")
 ls()
 ```
 
+    ## [1] "experience" "player"     "points"     "points1"    "points2"   
+    ## [6] "points3"    "position"   "salary"     "team"
+
 ### 1) A bit of data processing
 
-```{r processing}
+``` r
 # Create new vector for salaries in millions 
 salary_millions <- salary/1000000
 salary_millions <- round(salary_millions, digits = 2)
 
 # Check that conversion worked
 head(salary)
-head(salary_millions)
+```
 
+    ## [1] 26540100 12000000  8269663  1450000  1410598  6587132
+
+``` r
+head(salary_millions)
+```
+
+    ## [1] 26.54 12.00  8.27  1.45  1.41  6.59
+
+``` r
 # Create new experience vector by replacing 'R' with 0 and changing type of elements from char to int
 experience_int <- experience
 experience_int[experience_int == "R"] = 0
@@ -33,16 +45,29 @@ experience_int <- as.integer(experience_int)
 
 # Check that new vector contains no 'R' and is type int
 experience_int[experience_int == 'R']
-typeof(experience_int)
+```
 
+    ## integer(0)
+
+``` r
+typeof(experience_int)
+```
+
+    ## [1] "integer"
+
+``` r
 # Create a factor for position vector
 pos_fac <- factor(position, labels = c('center', 'power_fwd', 'point_guard', 'small_fwd', 'shoot_guard'))
 table(pos_fac)
 ```
 
+    ## pos_fac
+    ##      center   power_fwd point_guard   small_fwd shoot_guard 
+    ##          89          89          85          83          95
+
 ### 2) Scatterplot of Points and Salary
 
-```{r scatter}
+``` r
 # Create scatterplot of points and salary
 plot(points, 
      salary_millions, 
@@ -58,100 +83,176 @@ plot(points,
 abline(h = 10, lty = 2)
 ```
 
+![](hw01-bryant-luong_files/figure-markdown_github-ascii_identifiers/scatter-1.png)
+
 Observations of scatterplot:
 
-1. The cluster of points in the bottom left corner of the scatterplot means most players score below 500 points in a season and have a salary below $5 million.
+1.  The cluster of points in the bottom left corner of the scatterplot means most players score below 500 points in a season and have a salary below $5 million.
 
-2. There are 3 players who scored around 2,000 points last season but had salaries close to \$5 million and 3 players who scored between 1,600 and 1,900 points and had salaries close to \$2.5 million.
+2.  There are 3 players who scored around 2,000 points last season but had salaries close to $5 million and 3 players who scored between 1,600 and 1,900 points and had salaries close to $2.5 million.
 
-3. The player that scored the most points **did not** have the highest salary. The player with the highest salary scored about 2,000 points.
+3.  The player that scored the most points **did not** have the highest salary. The player with the highest salary scored about 2,000 points.
 
-4. If the 6 players mentioned in the first observation are excluded, there is graphical evidence that salary is correlated with points.
+4.  If the 6 players mentioned in the first observation are excluded, there is graphical evidence that salary is correlated with points.
 
-5. However, the correlation appears to be weak because at each salary level there is a lot of variation in the number of points scored. For example, for players who had a salary near $10 million dollars, which is represented by the dotted line, some players scored less than 500 points and some players scored above 1,000 points.
+5.  However, the correlation appears to be weak because at each salary level there is a lot of variation in the number of points scored. For example, for players who had a salary near $10 million dollars, which is represented by the dotted line, some players scored less than 500 points and some players scored above 1,000 points.
 
-6. There is a player whose salary is about $23 million and has scored less than 250 points.
+6.  There is a player whose salary is about $23 million and has scored less than 250 points.
 
 ### 3) Correlation between Points and Salary
-```{r statistics}
+
+``` r
 # number of individuals
 n <- length(player)
 n
+```
 
+    ## [1] 441
+
+``` r
 # summary of statistics for variable X (points)
 mean_points <- sum(points)/n
 mean_points
+```
 
+    ## [1] 546.6054
+
+``` r
 variance_points <- (1 / (n - 1)) * sum((points - mean_points)^2)
 variance_points
+```
 
+    ## [1] 239136.2
+
+``` r
 stddev_points <- sqrt(variance_points)
 stddev_points
+```
 
+    ## [1] 489.0156
+
+``` r
 # summary of statistics for variable Y (salary)
 mean_salary <- sum(salary_millions)/n
 mean_salary
+```
 
+    ## [1] 6.186689
+
+``` r
 variance_salary <- (1 / (n - 1)) * sum((salary_millions - mean_salary)^2)
 variance_salary
+```
 
+    ## [1] 43.19524
+
+``` r
 stddev_salary <- sqrt(variance_salary)
 stddev_salary
+```
 
+    ## [1] 6.572309
+
+``` r
 # covariance of X and Y
 covar_PS <- (1 / (n - 1)) * sum((points - mean_points) * (salary_millions - mean_salary))
 covar_PS
+```
 
+    ## [1] 2046.424
+
+``` r
 # correlation of X and Y
 cor_PS <- covar_PS / (stddev_points * stddev_salary)
 cor_PS
 ```
+
+    ## [1] 0.6367296
+
 ### 4) Simple Linear Regression
-```{r slr}
+
+``` r
 # Calculate slope of data using correlation and standard deviations
 slope <- cor_PS * (stddev_salary / stddev_points)
 slope
+```
 
+    ## [1] 0.008557567
+
+``` r
 # Calculate intercept of data using mean of points and salary and slope
 intercept <- mean_salary - mean_points * slope
 intercept
+```
 
+    ## [1] 1.509077
+
+``` r
 # Create vector of predicted salaries 
 y_hat <- intercept + slope * points
 ```
 
 ##### Summary Statisics of Predicted Values
-```{r summary}
+
+``` r
 summary(y_hat)
 ```
+
+    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+    ##   1.509   2.844   5.206   6.187   8.184  23.399
+
 ##### Regression Equation
-The simple linear regression equation is `y_hat = intercept + slope * points`. 
+
+The simple linear regression equation is `y_hat = intercept + slope * points`.
 
 ##### How do you interpret the slope coefficient?
+
 The slope coefficient shows the average increase in annual salary per point.
 
 ##### How do you interpret the intercept?
+
 The intercept shows the average baseline salary. If the player doesn't score any points, the player has a salary near the intercept salary, which is $1.5 million.
 
 ##### What is the predicted salary (in millions) for a player that scores:
-```{r predicted}
+
+``` r
 # 0 points
 intercept + slope * 0
+```
 
+    ## [1] 1.509077
+
+``` r
 # 100 points
 intercept + slope * 100
+```
 
+    ## [1] 2.364833
+
+``` r
 # 500 points
 intercept + slope * 500
+```
 
+    ## [1] 5.78786
+
+``` r
 # 1000 points
 intercept + slope * 1000
+```
 
+    ## [1] 10.06664
+
+``` r
 # 2000 points
 intercept + slope * 2000
 ```
+
+    ## [1] 18.62421
+
 ### 5) Plotting the regression line
-```{r scatter with regression}
+
+``` r
 # plot data in scatter plot
 plot(points, 
      salary_millions, 
@@ -191,27 +292,46 @@ text(x = 2490,
      cex = 0.8)
 ```
 
+![](hw01-bryant-luong_files/figure-markdown_github-ascii_identifiers/scatter%20with%20regression-1.png)
+
 ### 6) Regression residuals and Coefficient of Determination
-```{r residuals}
+
+``` r
 # Calculate residuals and store them in a vector
 residuals <- salary_millions - y_hat
 summary(residuals)
+```
 
+    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+    ## -14.187  -2.792  -1.095   0.000   2.556  18.814
+
+``` r
 # Calculate the RSS and store them in a vector
 rss <- sum(residuals * residuals)
 rss
+```
 
+    ## [1] 11300.45
+
+``` r
 # Calculate the TSS and store them in a vector
 tss <- sum((salary_millions - mean_salary)^2)
 tss
+```
 
+    ## [1] 19005.91
+
+``` r
 # Calculate the coefficient of determination
 r_sqrd <- 1 - (rss / tss)
 r_sqrd
 ```
 
+    ## [1] 0.4054246
+
 ### 7) Exploring Position and Experience
-```{r scatterplot}
+
+``` r
 # Create scatterplot of years of experience to salary
 plot(experience_int, salary_millions, 
      main = 'Scatterplot with lowess smooth', 
@@ -233,10 +353,13 @@ abline(v = 8,
        lty = 2)
 ```
 
-The 2D scatterplot above shows that the variation in salary increases with years of experience. Most players with 0 to 3 years of experience have a salary near or below $5 million. After 3 years of experience, there is a lot of variation in salary. For example, a player with 8 years of experience can earn from $2 million to $27 million. The dotted line marks 8 years of experience. The lowess line suggests experience does not improve a player's salary after the player has played for 6-7 years. However, this conclusion is not accurate because there is so much variability in salary after 3 years of experience. 
+![](hw01-bryant-luong_files/figure-markdown_github-ascii_identifiers/scatterplot-1.png)
+
+The 2D scatterplot above shows that the variation in salary increases with years of experience. Most players with 0 to 3 years of experience have a salary near or below $5 million. After 3 years of experience, there is a lot of variation in salary. For example, a player with 8 years of experience can earn from $2 million to $27 million. The dotted line marks 8 years of experience. The lowess line suggests experience does not improve a player's salary after the player has played for 6-7 years. However, this conclusion is not accurate because there is so much variability in salary after 3 years of experience.
 
 The scatterplot also shows that not many players play more than 13 years.
-```{r 3dscatterplot}
+
+``` r
 library(scatterplot3d)
 # Create 3D scatterplot
 # x-axis: Points 
@@ -251,12 +374,13 @@ scatterplot3d(points,
               xlab = "Points",
               ylab = "Experience",
               zlab = "Salary (in millions)")
-
 ```
 
-The 3D scatterplot is very difficult to use. One way to make it better is to make it interactive so we can look at it from multiple perspectives. With the current perspective, the 3D scatterplot suggests players with more experience also score more points and have a higher salary. 
+![](hw01-bryant-luong_files/figure-markdown_github-ascii_identifiers/3dscatterplot-1.png)
 
-```{r boxplot}
+The 3D scatterplot is very difficult to use. One way to make it better is to make it interactive so we can look at it from multiple perspectives. With the current perspective, the 3D scatterplot suggests players with more experience also score more points and have a higher salary.
+
+``` r
 # Center
 C = 1
 # Power forward
@@ -284,8 +408,9 @@ boxplot(salary_millions ~ pos_num,
         xlab = 'Position',
         ylab = 'Salary (in millions)',
         names = c('center', 'point_fwd', 'point_guard', 'small_fwd', 'shoot_guard'))
-
 ```
+
+![](hw01-bryant-luong_files/figure-markdown_github-ascii_identifiers/boxplot-1.png)
 
 From the boxplot, position does not seem related to salary. All positions have a similar mean salary and the quartiles differ by a maximum of $4 million. The long tails and outliers of each position suggest there are individual players that have much higher salaries than most players in the same position. These players may be the superstars! It is very interesting that each position's maximum salary is also similar if we exclude the small forward that earns over $30 million.
 
@@ -303,7 +428,7 @@ From the boxplot, position does not seem related to salary. All positions have a
 
     This isn't my first time using git. Gaston's slides on git are awesome at explaining the idea of git.
 
-**4. If  this was the first time using GitHub, how do you feel about it?**
+**4. If this was the first time using GitHub, how do you feel about it?**
 
     This isn't my first time using GitHub. GitHub is great! I think GitHub is hard to explain so students must learn by using it.
 
@@ -330,5 +455,3 @@ From the boxplot, position does not seem related to salary. All positions have a
 **10. Was there anything exciting?**
 
     Yes. This assignment was fun because it's teaching me more about the NBA and it was useful in demonstrating the flexibility of R and RStudio. I like the plot function a lot. Hopefully we get to much bigger datasets soon.
-
-
