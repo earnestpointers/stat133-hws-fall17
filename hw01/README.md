@@ -1,6 +1,6 @@
 # HW01 - Summarizing Variables
 
-The purpose of this HW is to summarize variables (quantatitative and categorical) graphically and numerically.
+The purpose of this HW is to summarize variables (quantitative and categorical) graphically and numerically.
 
 Below are the web pages I used to complete the HW:
 
