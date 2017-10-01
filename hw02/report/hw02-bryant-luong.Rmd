@@ -3,6 +3,8 @@ title: "HW 02 - Basics of Data Frames"
 # author: "By Bryant Luong on 2017-09-29"
 output: 
   html_document:
+    theme: lumen
+    highlight: tango
     toc: true
     toc_float: 
       collapsed: false
