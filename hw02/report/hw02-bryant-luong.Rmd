@@ -1,8 +1,13 @@
 ---
 title: "HW 02 - Basics of Data Frames"
-author: "Bryant Luong"
-date: "9/29/2017"
-output: html_document
+# author: "By Bryant Luong on 2017-09-29"
+output: 
+  html_document:
+    toc: true
+    toc_float: 
+      collapsed: false
+    toc_depth: 5
+    number_sections: false
 ---
 
 ```{r setup}
@@ -11,13 +16,13 @@ knitr::opts_chunk$set(echo = TRUE)
 library(readr)
 library(dplyr)
 ```
-#### 1) Create a data dictionary
+# Create a data dictionary
 
-#### 2) Importing the data into R using `read.csv()` and `read_csv()`
+# Importing the data into R
 ```{r read}
 
 # Use read.csv() to read csv into R and check with str()
-base <- read.csv(file = "data/nba2017-player-statistics.csv",
+base <- read.csv(file = "nba2017-player-statistics.csv",
                  colClasses = c('character', 
                                 'character', 
                                 'factor',
@@ -45,7 +50,7 @@ base <- read.csv(file = "data/nba2017-player-statistics.csv",
 str(base)
 
 # Use read_csv() to read csv into R and check with str()
-rdr <- read_csv(file = "data/nba2017-player-statistics.csv", 
+rdr <- read_csv(file = "nba2017-player-statistics.csv", 
                 col_types = cols( Player = col_character(), 
                                   Team = col_character(), 
                                   Position = col_factor(levels = c('C',
@@ -77,7 +82,7 @@ rdr <- read_csv(file = "data/nba2017-player-statistics.csv",
 str(rdr)
 ```
 
-#### 3) Right after importing the data
+# Right after importing the data
 ```{r processing}
 # Replace occurences of "R" with 0 
 base$Experience[base$Experience == "R"] = 0
@@ -87,7 +92,7 @@ base$Experience <- as.integer(base$Experience)
 str(base)
 ```
 
-#### 4) Performance of players
+# Performance of players
 ```{r eff}
 # Add Missed_FG to base
 base$Missed_FG <- (base$FGA - base$FGM)
@@ -207,9 +212,9 @@ barplot(height = as.vector(sorted.all.cor[,1]),
                 'red'))
 ```
 
-#### 5) Efficiency and Salary
+# Efficiency and Salary
 
-#### All Players
+## All Players 
 ```{r scatterplot}
 # Add scatterplot of efficiency and salary
 plot(x = base$EFF,
@@ -239,9 +244,9 @@ cor.eff.sal <- cor(x = base$EFF,
 cor.eff.sal
 ```
 
-#### What can you say about the relationship between these two variables?
+### What can you say about the relationship between these two variables?
 
-#### Players with More Experience
+## Players with More Experience
 ```{r pros}
 players2 <- filter(base, MPG >= 20)
 
@@ -274,9 +279,9 @@ cor.eff.sal <- cor(x = players2$EFF,
                    y = players2$Salary)
 cor.eff.sal
 ```
-#### What can you say about these two variables for the established players?
+### What can you say about these two variables for the established players?
 
-#### 6) Comments and Reflection
+# Comments and Reflection
 
 **1. What was hard?**
 
