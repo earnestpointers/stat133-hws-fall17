@@ -63,4 +63,4 @@
 
 **24** TO: Turnovers
 
-**Notes**: This dataset has no missing value in any row or column. The values in columns 'Points3' and Points2' need to be weighted by 3 and 2 respectively, if you want to know how many points were scored.
+**Notes**: This dataset has no missing value in any row or column. The values in columns _Points3_ and _Points2_ need to be weighted by 3 and 2 respectively, if you want to know how many points were scored.
