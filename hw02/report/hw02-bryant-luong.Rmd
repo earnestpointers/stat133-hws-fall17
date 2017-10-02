@@ -1,15 +1,14 @@
 ---
 title: "HW 02 - Basics of Data Frames"
-# author: "By Bryant Luong on 2017-09-29"
-output: 
+author: "Bryant Luong"
+output:
   html_document:
     theme: lumen
     highlight: tango
     toc: true
-    toc_float: 
+    toc_float:
       collapsed: false
-    toc_depth: 5
-    number_sections: false
+    number_sections: true
 ---
 
 ```{r setup}
@@ -18,7 +17,11 @@ knitr::opts_chunk$set(echo = TRUE)
 library(readr)
 library(dplyr)
 ```
-# Create a data dictionary
+# Create a data dictionary  
+
+The data dictionary is stored at the following link:
+
+https://github.com/earnestpointers/stat133-hws-fall17/blob/master/hw02/data/nba2017-player-statistics-dictionary.md
 
 # Importing the data into R
 ```{r read}
@@ -248,6 +251,10 @@ cor.eff.sal
 
 ### What can you say about the relationship between these two variables?
 
+A correlation coefficient of 0.65 suggests the relationship between efficiency and salary is weak. 
+In other words, you'd likely predict the wrong salary if you're given an efficiency value. 
+It seems salary is dependent on other variables that aren't included in the efficiency equation.
+
 ## Players with More Experience
 ```{r pros}
 players2 <- filter(base, MPG >= 20)
@@ -282,6 +289,15 @@ cor.eff.sal <- cor(x = players2$EFF,
 cor.eff.sal
 ```
 ### What can you say about these two variables for the established players?
+
+The correlation coefficient of efficiency and salary for established players is 0.63. 
+This coefficient is 0.002 lower than the coefficient for all players. 
+The correlation is even weaker for established players. 
+Salary may depend on other variables that aren't included in the efficiency equation.
+All the points that aren't close to the lowess line tell us that there is variation on how much players earn per efficiency value.
+There is a lot of variation in salary for players who have efficiency values between 5 and 14. 
+Players who have efficiency values above 14 earn more per efficiency value on average. 
+
 
 # Comments and Reflection
 
