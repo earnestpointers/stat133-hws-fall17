@@ -11,3 +11,5 @@ Below are the web pages I used to complete the HW:
 3. https://stat.ethz.ch/R-manual/R-devel/library/graphics/html/axis.html
 
 4. https://www.stat.berkeley.edu/~nolan/stat133/Fall05/notes/RSubset.html
+
+5. http://rmarkdown.rstudio.com/html_document_format.html
