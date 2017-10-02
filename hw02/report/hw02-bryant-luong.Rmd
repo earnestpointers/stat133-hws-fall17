@@ -1,14 +1,15 @@
 ---
 title: "HW 02 - Basics of Data Frames"
 author: "Bryant Luong"
+date: "2017-09-29"
 output:
   html_document:
     theme: lumen
     highlight: tango
     toc: true
+    number_sections: true
     toc_float:
       collapsed: false
-    number_sections: true
 ---
 
 ```{r setup}
