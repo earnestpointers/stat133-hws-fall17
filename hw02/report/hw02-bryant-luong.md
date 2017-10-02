@@ -1,5 +1,6 @@
 HW 02 - Basics of Data Frames
 ================
+By Bryant Luong on 2017-09-29
 
 ``` r
 knitr::opts_chunk$set(echo = TRUE)
