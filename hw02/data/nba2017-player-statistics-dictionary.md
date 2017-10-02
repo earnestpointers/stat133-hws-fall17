@@ -1,4 +1,4 @@
-#Data Dictionary
+# Data Dictionary
 
 **Data file**: nba2017-player-statistics.csv
 
