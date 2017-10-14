@@ -1,0 +1,10 @@
+---
+title: "HW03 - Ranking NBA Teams"
+author: "Bryant Luong"
+date: "10/13/2017"
+output: github_document
+---
+
+```{r setup, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+```
