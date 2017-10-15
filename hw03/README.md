@@ -13,3 +13,5 @@ Below are the web pages I used to complete the HW:
 6. https://yihui.name/knitr/demo/externalization/
 7. https://stackoverflow.com/questions/20041136/avoid-ggplot-sorting-the-x-axis-while-plotting-geom-bar
 8. https://yihui.name/knitr/demo/externalization/ 
+9. https://github.com/carwin/markdown-styleguide
+10. https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
