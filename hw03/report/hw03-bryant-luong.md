@@ -1,24 +1,111 @@
----
-title: "HW03 - Ranking NBA Teams"
-author: "Bryant Luong"
-date: "10/13/2017"
-output: github_document
----
+HW03 - Ranking NBA Teams
+================
+Bryant Luong
+10/13/2017
 
-```{r setup, include=TRUE}
+``` r
 knitr::opts_chunk$set(echo = TRUE)
 knitr::read_chunk(path = '../code/make-teams-table.R')
 ```
 
-```{r tables}
-# load libraries and create 'NBAroster' and 'NBAstats' data frames from make-teams-table.R script
+``` r
+# load packages
+library(dplyr)
 ```
 
-```{r teams}
-# create 'teams' data frame
+    ## Warning: package 'dplyr' was built under R version 3.4.2
+
+    ## 
+    ## Attaching package: 'dplyr'
+
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     filter, lag
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     intersect, setdiff, setequal, union
+
+``` r
+library(readr)
+library(ggplot2)
+
+# read tables into R and store into 2 new objects
+NBAstats <- read_csv(file = "../data/nba2017-stats.csv")
 ```
 
-```{r rbs}
+    ## Parsed with column specification:
+    ## cols(
+    ##   .default = col_integer(),
+    ##   player = col_character(),
+    ##   field_goals_perc = col_double(),
+    ##   points3_perc = col_double(),
+    ##   points2_perc = col_double(),
+    ##   points1_perc = col_double()
+    ## )
+
+    ## See spec(...) for full column specifications.
+
+``` r
+NBAroster <- read_csv(file = "../data/nba2017-roster.csv")
+```
+
+    ## Parsed with column specification:
+    ## cols(
+    ##   player = col_character(),
+    ##   team = col_character(),
+    ##   position = col_character(),
+    ##   height = col_integer(),
+    ##   weight = col_integer(),
+    ##   age = col_integer(),
+    ##   experience = col_integer(),
+    ##   salary = col_double()
+    ## )
+
+``` r
+# add 5 new variables to NBAstats 
+# missed_fg
+NBAstats <- mutate(NBAstats, 
+                   missed_fg = field_goals_atts - field_goals_made)
+# missed_ft
+NBAstats <- mutate(NBAstats,
+                    missed_ft = points1_atts - points1_made)
+# points
+NBAstats <- mutate(NBAstats,
+                   points = points1_made + 2*points2_made + 3*points3_made)
+# rebounds
+NBAstats <- mutate(NBAstats,
+                   rebounds = off_rebounds + def_rebounds)
+# efficiency
+NBAstats <- mutate(NBAstats,
+                   efficiency = (points + rebounds + assists + steals + 
+                                   blocks -  missed_fg - missed_ft 
+                                 - turnovers)/games_played)
+```
+
+``` r
+# merge the data frames NBAstats and NBAroster with merge()
+m <- merge(NBAroster, NBAstats)
+
+# create data frame 'teams'
+teams <- m %>% group_by(team) %>% summarise(experience = round(sum(experience), digits = 2),
+                                            salary = round(sum(salary)/1000000, digits = 2),
+                                            points3 = sum(points3_made),
+                                            points2 = sum(points2_made),
+                                            free_throws = sum(points1_made),
+                                            points = sum(points1_made + 2*points2_made 
+                                                         + 3*points3_made),
+                                            off_rebounds = sum(off_rebounds),
+                                            def_rebounds = sum(def_rebounds),
+                                            assists = sum(assists),
+                                            steals = sum(steals),
+                                            blocks = sum(blocks),
+                                            turnovers = sum(turnovers),
+                                            fouls = sum(fouls),
+                                            efficiency = sum(efficiency))
+```
+
+``` r
 # rank team by salary 
 teamsBySalary.df <- arrange(teams, salary)
 
@@ -39,7 +126,9 @@ pbl + geom_hline(aes(yintercept=mean(teamsBySalary.df$salary)),
                  lty = 1, lwd = 1)
 ```
 
-```{r rbp}
+![](hw03-bryant-luong_files/figure-markdown_github-ascii_identifiers/rbs-1.png)
+
+``` r
 # rank team by total points
 teamsByPoints.df <- arrange(teams, points)
 
@@ -61,7 +150,9 @@ pbl + geom_hline(aes(yintercept=mean(teamsByPoints.df$points)),
                  lty = 1, lwd = 1)
 ```
 
-```{r rbe}
+![](hw03-bryant-luong_files/figure-markdown_github-ascii_identifiers/rbp-1.png)
+
+``` r
 # rank team by efficiency
 teamsByEff.df <- arrange(teams, efficiency)
 
@@ -82,7 +173,10 @@ pbl + geom_hline(aes(yintercept=mean(teamsByEff.df$efficiency)),
                  color = rgb(1, 0, 0, 0.5), 
                  lty = 1, lwd = 1)
 ```
-```{r pca}
+
+![](hw03-bryant-luong_files/figure-markdown_github-ascii_identifiers/rbe-1.png)
+
+``` r
 pca.df <- teams %>% select(team, 
                            points3, 
                            points2, 
@@ -109,7 +203,11 @@ pc1pc2 <- data.frame('PC1' = pcs$x[,1],
 
 ggplot(data = pc1pc2, 
        aes(x = PC1, y = PC2, label = team)) + geom_text() + geom_hline(yintercept = 0, color = 'grey') + geom_vline(xintercept = 0, color = 'grey') + labs(title = 'PCA plot (PC1 and PC2)')
+```
 
+![](hw03-bryant-luong_files/figure-markdown_github-ascii_identifiers/pca-1.png)
+
+``` r
 s1 <- data.frame('s1' = 100 * (pcs$x[,1] - min(pcs$x[,1])) / (max(pcs$x[,1]) - min(pcs$x[,1])),
                  'team' = teams$team)
 
@@ -128,7 +226,10 @@ p + geom_bar(stat = 'identity',
                                                   title = 'NBA Teams ranked by scaled PC1')
 ```
 
-## Comments and Reflections
+![](hw03-bryant-luong_files/figure-markdown_github-ascii_identifiers/pca-2.png)
+
+Comments and Reflections
+------------------------
 
 **1. Was this your first time working on a project with such file structure? If yes, how do you feel about it?**
 
@@ -144,11 +245,11 @@ No, we used it in lab!
 
 **4. What was hard, even though you saw them in class/lab?**
 
-There are ggplot functions that are not intuitive to me. 
+There are ggplot functions that are not intuitive to me.
 
 **5. What was easy?**
 
-The first parts of the mini project were easy. 
+The first parts of the mini project were easy.
 
 **6. Did anyone help you complete this assignment?**
 
@@ -160,9 +261,8 @@ No.
 
 **8. What was the most time consuming part?**
 
-Figuring out why my barplot was being automatically sorted alphabetically. 
+Figuring out why my barplot was being automatically sorted alphabetically.
 
 **9. Was there anything interesting?**
 
 PCA is very cool and useful.
-
