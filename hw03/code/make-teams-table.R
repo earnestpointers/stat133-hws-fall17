@@ -1,9 +1,13 @@
 # ========================================================================
 # author: Bryant Luong
-# title: Data Preparation
-# description: This script prepares the data for PCA in HW03.
+# title: Data Preparation Script for HW03
+# description: This script prepares the data for PCA in HW03. Specifically, 
+# it creates 3 tables: NBAstats, NBAroster, and teams. Then, 2 summary 
+# text files, 1 star plot, and 1 scatterplot is outputted. The script also
+# has @knitr groups so the script can be used in an Rmd file.
 # input(s): nba2017-stats.csv, nba2017-roster.csv
 # output(s): efficiency-summary.txt, teams-summary.txt, nba2017-teams.csv
+# output(s): teams_star_plot.pdf, experience_salary.pdf
 # ========================================================================
 
 ## @knitr tables
@@ -74,7 +78,7 @@ sink()
 write_csv(x = teams, path = "../data/nba2017-teams.csv")
 
 ## @knitr plots
-# create star plot for data in teams data frame
+# create star plot for data in 'teams' data frame and save as 'teams_star_plot.pdf'
 stars(teams[,-1], 
       labels = teams$team)
 
