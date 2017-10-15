@@ -12,3 +12,4 @@ Below are the web pages I used to complete the HW:
 5. https://stackoverflow.com/questions/10941225/horizontal-barplot-in-ggplot2
 6. https://yihui.name/knitr/demo/externalization/
 7. https://stackoverflow.com/questions/20041136/avoid-ggplot-sorting-the-x-axis-while-plotting-geom-bar
+8. https://yihui.name/knitr/demo/externalization/ 
