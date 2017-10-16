@@ -139,7 +139,7 @@ pca.df <- teams %>% select(team,
                            turnovers, 
                            fouls)
 
-## compute PCA
+# compute PCA
 pcs <- prcomp(pca.df[-1], scale. = TRUE)
 
 # create data frames for eigenvalues, their proportions, and cumulative proportions
@@ -149,6 +149,7 @@ cumprop <- cumsum(prop)
 
 # create data frame with all 3 metrics
 eigs.df <- data.frame(eigs, prop, cumprop)
+eigs.df
 
 # create data frame that contains only PC1 and PC2 values of each team
 pc1pc2 <- data.frame('PC1' = pcs$x[,1], 
