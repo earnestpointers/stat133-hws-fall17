@@ -10,12 +10,13 @@
 # output(s): teams_star_plot.pdf, experience_salary.pdf
 # ========================================================================
 
-## @knitr tables
+## @knitr packages
 # load packages
 library(dplyr)
 library(readr)
 library(ggplot2)
 
+## @knitr tables
 # read tables into R and store into 2 new objects
 NBAstats <- read_csv(file = "../data/nba2017-stats.csv")
 NBAroster <- read_csv(file = "../data/nba2017-roster.csv")

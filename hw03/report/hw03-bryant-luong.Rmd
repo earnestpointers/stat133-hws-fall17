@@ -4,20 +4,23 @@ author: "Bryant Luong"
 date: "10/13/2017"
 output: github_document
 ---
-
+## Setup
 ```{r setup, include=TRUE}
 knitr::opts_chunk$set(echo = TRUE)
 knitr::read_chunk(path = '../code/make-teams-table.R')
 ```
-
-```{r tables}
-# load libraries and create 'NBAroster' and 'NBAstats' data frames from make-teams-table.R script
+```{r packages}
 ```
 
+## Data Preparation
+```{r tables}
+# create 'NBAroster' and 'NBAstats' data frames from make-teams-table.R script
+```
 ```{r teams}
 # create 'teams' data frame
 ```
 
+## Basic Ranking: By Salary
 ```{r rbs}
 # rank team by salary 
 teamsBySalary.df <- arrange(teams, salary)
@@ -39,6 +42,21 @@ pbl + geom_hline(aes(yintercept=mean(teamsBySalary.df$salary)),
                  lty = 1, lwd = 1)
 ```
 
+### Provide a concise description of this basic ranking.
+
+The mean team salary was approximately $91 million and 6 teams were very close to the mean. 
+The standard deviation was $15.76 million.
+
+The Cleveland Cavaliers had the largest team salary of $125.79 million, which is 2 SDs above
+the mean. The Philadelphia 76ers had the smallest team salary of $55.78 million, which is 2 SDs
+below the mean.
+
+The team salaries change the fastest around \$60 to \$80 million. After \$80 million a year, 
+the increase in team salary between teams is smaller. However, the biggest difference between 
+2 neighboring teams on the barplot is between the highest and second-highest team salaries. 
+The Cavaliers spend almost $40 million more than the Clippers.
+
+## Basic Ranking: By Points
 ```{r rbp}
 # rank team by total points
 teamsByPoints.df <- arrange(teams, points)
@@ -61,6 +79,18 @@ pbl + geom_hline(aes(yintercept=mean(teamsByPoints.df$points)),
                  lty = 1, lwd = 1)
 ```
 
+### Provide a concise description of this basic ranking.
+
+In the 2017 season, the Sacramento Kings scored the least points and the Golden State Warriors scored the most points.
+The Warriors scored 9,473 points and the Kings scored only 6,348, so the Warriors scored almost 50% more points. 
+The Warriors even scored 562 more points than the Clippers, which is the biggest difference between 2 neighboring teams
+on the barplot.
+
+The mean number of points was 8,035 and the standard deviation was 710 points. The Warriors are 2 SDs above the mean.
+
+The Clippers is the only team that had the same ranking by salary and by points. By these two metrics, they're 2nd in the NBA.
+
+## Basic Ranking: By Efficiency
 ```{r rbe}
 # rank team by efficiency
 teamsByEff.df <- arrange(teams, efficiency)
@@ -82,7 +112,21 @@ pbl + geom_hline(aes(yintercept=mean(teamsByEff.df$efficiency)),
                  color = rgb(1, 0, 0, 0.5), 
                  lty = 1, lwd = 1)
 ```
+
+### Provide concise descriptions of the basic rankings.
+
+Comparing the rankings by salary and by efficiency, 2 teams have the same ranking, the Lakers and Cavaliers. 
+The Lakers are ranked #20 and the Cavaliers are ranked #1. 
+
+Comparing the rankings by points and by efficiency, 0 teams have the same ranking.
+
+The mean efficiency is 149 and the standard deviation is 11.28. The Cavaliers have the maximum efficiency of 
+177.86 and the Magics have the minimum efficiency of 125.14. 22 teams are within 1 SD and 5 teams 
+are above 1 SD.
+
+## Principal Components Analysis
 ```{r pca}
+# create data frame for PCA
 pca.df <- teams %>% select(team, 
                            points3, 
                            points2, 
@@ -95,28 +139,85 @@ pca.df <- teams %>% select(team,
                            turnovers, 
                            fouls)
 
+## compute PCA
 pcs <- prcomp(pca.df[-1], scale. = TRUE)
 
+# create data frames for eigenvalues, their proportions, and cumulative proportions
 eigs <- round(pcs$sdev^2, digits = 4)
 prop <- round(pcs$sdev^2 / sum(pcs$sdev^2), digits = 4)
 cumprop <- cumsum(prop)
 
+# create data frame with all 3 metrics
 eigs.df <- data.frame(eigs, prop, cumprop)
 
+# create data frame that contains only PC1 and PC2 values of each team
 pc1pc2 <- data.frame('PC1' = pcs$x[,1], 
                      'PC2' = pcs$x[,2],
                      'team' = teams$team)
 
+# create scatterplot of teams using PC1 and PC2
 ggplot(data = pc1pc2, 
        aes(x = PC1, y = PC2, label = team)) + geom_text() + geom_hline(yintercept = 0, color = 'grey') + geom_vline(xintercept = 0, color = 'grey') + labs(title = 'PCA plot (PC1 and PC2)')
+```
 
+### Interpret the scatterplot. 
+
+The purpose of PCA is to find the basis that captures the most variation in the data and to reduce the dimensions of data.
+PCA will guide us to the teams that are most different from other teams by giving us principal components (PC).
+Principal components can be understood as summaries of all dimensions of the data.
+By plotting PC1 and PC2 together, we are able to **see** the performances of teams because our data has the ten most critical
+metrics of game play: 3-pointers, 2-pointers, free throws, rebounds, assists, steals, turnovers, blocks, and fouls.
+
+The teams that are inside -3 and 3 on the PC1 axis have performed similarly. The unusual teams are GSW, NOP, DAL, and SAC.
+To further understand why these teams are outliers, we first look at the weights for PC1 to understand how each game play
+statistic contributes to the PC score. We know the PC scores are a linear combination of the 10 game play metrics. 
+The weights for PC1 are:
+
+variable     | weight 
+------------ | ------
+points3      | 0.1122
+points2      | 0.3602
+free_throws  | 0.3228
+off_rebounds | 0.3029
+def_rebounds | 0.3719
+assists      | 0.3125
+steals       | 0.3447
+blocks       | 0.3162
+turnovers    | 0.3354
+fouls        | 0.3073
+
+The game play statistics that contribute most to the PC score are defensive rebounds, 2-pointers, and turnovers. Let's
+check these statistics for GSW, NOP, DAL, and SAC.
+```{r def}
+pca.df %>% group_by(team) %>% arrange(def_rebounds)
+pca.df %>% group_by(team) %>% arrange(desc(def_rebounds))
+```
+The data above tells us that SAC, DAL, and NOP are the 3 teams with the least defensive rebounds and GSW had the most defensive rebounds. Let's
+do the same search for 2-pointers and turnovers.
+```{r 2p}
+pca.df %>% group_by(team) %>% arrange(points2)
+pca.df %>% group_by(team) %>% arrange(desc(points2))
+```
+The data above tells us that SAC, DAL, and NOP are among the teams that scored the fewest 2-pointers and GSW is in the top 5. 
+```{r to}
+pca.df %>% group_by(team) %>% arrange(turnovers)
+pca.df %>% group_by(team) %>% arrange(desc(turnovers))
+```
+The data above tells us that DAL, NOP, and SAC are in the top 5 for fewest turnovers while GSW is in the top 3 for the most turnovers. 
+
+We can do a similar analysis for PC2 for teams greater than 2 and less than -2. These teams are PHO, HOU, and GSW.
+
+## Index based on PC1
+
+```{r scaled_pc1}
+# create index based on PC1
 s1 <- data.frame('s1' = 100 * (pcs$x[,1] - min(pcs$x[,1])) / (max(pcs$x[,1]) - min(pcs$x[,1])),
                  'team' = teams$team)
 
 # rank team by scaled PC1
 s1 <- arrange(s1, desc(s1))
 
-# make ordered factor of teams
+# make 'teams' an ordered factor
 s1$team <- factor(s1$team, levels = s1$team)
 
 # create horizontal bar chart of scaled PC1 to visualize ranking  
@@ -127,6 +228,15 @@ p + geom_bar(stat = 'identity',
                                                   y = 'First PC (scaled from 0 to 100)',
                                                   title = 'NBA Teams ranked by scaled PC1')
 ```
+
+### Provide a brief description of the PC1 index to rank the teams.
+
+The PC1 index uses the first principal component to create a 0-100 scale and each team is ranked relative to the minimum 
+first principal component. The width of the scale is determined by the minimum and maximum principal component score of the teams.
+Because the first principal component score of each team is calculated using the same set of weights, the variation we see
+is from the game play statistics. As we can see in the table above, the principal component weights are all between 0.3 and 0.4 
+so this gives us confidence that there isn't too much bias towards 1 game play statistics. In fact, the GSW have the best 3-point
+statistics but that statistic only gets weighted by 0.11. With this mind, they still come up at the top!
 
 ## Comments and Reflections
 
