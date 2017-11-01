@@ -2,8 +2,14 @@
 title: "Post 1 Purrr - The Youngest Tidyverse Package"
 author: "Bryant Luong"
 date: "October 31, 2017"
-output: github_document
-
+output:
+  html_document:
+    theme: lumen
+    highlight: tango
+    toc: true
+    number_sections: true
+    toc_float:
+      collapsed: false
 ---
 
 # Introduction 
