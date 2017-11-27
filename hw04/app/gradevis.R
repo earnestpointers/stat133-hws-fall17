@@ -44,7 +44,7 @@ scatter_choices = names(cleandata)[2:23]
 # BEGINNING OF UI FUNCTION
 # =============================================================================
 ui = fluidPage(
-  titlePanel(h1("Grade Visualizer")),
+  titlePanel(h1("Grade Visualizer by Bryant Luong")),
   
   sidebarLayout(
     sidebarPanel(
