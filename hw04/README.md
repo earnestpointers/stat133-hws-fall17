@@ -7,7 +7,7 @@ Bryant Luong
 library(shiny)
 
 # run Shiny app whose source code is in subdir of repo
-#runGitHub(repo = "stat133-hws-fall17", 
+# runGitHub(repo = "stat133-hws-fall17", 
 #          username = "earnestpointers", 
 #          subdir = "hw04/app")
 ```
